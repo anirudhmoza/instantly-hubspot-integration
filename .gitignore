@@ -1,0 +1,21 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+
+# Secrets / keys (never commit)
+*.pem
+.env
+.env.*
+
+# Local Claude Code settings (machine-specific)
+.claude/
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~

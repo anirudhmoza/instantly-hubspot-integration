@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Instantly to HubSpot Sync",
+  "version": "1.0.0",
+  "description": "Automatically sync Instantly leads to HubSpot when marked as meeting booked",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://app.instantly.ai/*",
+    "https://api.hubapi.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://app.instantly.ai/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

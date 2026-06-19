@@ -1,0 +1,13 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="64" fill="#FF6B35"/>
+
+  <!-- Sync icon -->
+  <path d="M64 24L36 44L64 64L92 44L64 24Z" fill="white" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 84L64 104L92 84" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 64L64 84L92 64" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Arrow indicating sync -->
+  <circle cx="94" cy="34" r="12" fill="white"/>
+  <path d="M94 28L94 40M94 28L89 33M94 28L99 33" stroke="#FF6B35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

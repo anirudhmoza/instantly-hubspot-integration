@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instantly → HubSpot Sync</title>
+  <link rel="stylesheet" href="styles/popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1>Instantly → HubSpot</h1>
+    </header>
+
+    <div class="status-section">
+      <div class="status-card" id="statusCard">
+        <div class="status-indicator">
+          <span class="status-dot" id="statusDot"></span>
+          <span class="status-text" id="statusText">Checking connection...</span>
+        </div>
+        <p class="status-description" id="statusDescription">Initializing extension</p>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h2>Settings</h2>
+
+      <!-- HubSpot Settings -->
+      <div class="settings-group">
+        <h3 class="settings-group-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          HubSpot Configuration
+        </h3>
+
+        <div class="form-group">
+          <label for="hubspotKey">
+            <span class="label-text">HubSpot API Key</span>
+            <span class="label-hint">Private App Access Token</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="hubspotKey"
+              placeholder="pat-na1-********-****-****-****-************"
+              autocomplete="off"
+            >
+            <button class="toggle-visibility" id="toggleHubspotVisibility" type="button">
+              <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dealPipeline">
+            <span class="label-text">Deal Pipeline</span>
+            <span class="label-hint">Select the pipeline for new deals</span>
+          </label>
+          <select id="dealPipeline" class="select-input">
+            <option value="">Loading pipelines...</option>
+          </select>
+          <button type="button" id="refreshPipelines" class="btn-refresh" style="margin-top: 8px; padding: 4px 12px; font-size: 12px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; cursor: pointer;">
+            Refresh Pipelines
+          </button>
+        </div>
+
+        <div class="form-group">
+          <label for="dealStage">
+            <span class="label-text">Deal Stage</span>
+            <span class="label-hint">Choose the initial stage for synced deals</span>
+          </label>
+          <select id="dealStage" class="select-input">
+            <option value="">Select a pipeline first</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- OpenAI Settings -->
+      <div class="settings-group">
+        <h3 class="settings-group-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="currentColor"/>
+            <path d="M13 7h-2v5.41l4.29 4.29 1.41-1.41L13 11.59V7z" fill="currentColor"/>
+          </svg>
+          AI Formatting (Optional)
+        </h3>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="useAiFormatting">
+            <span class="checkbox-label">Use AI for email formatting</span>
+          </label>
+          <p class="form-hint">Uses OpenAI to format emails more intelligently (~$0.0006 per contact)</p>
+        </div>
+
+        <div class="form-group ai-settings" id="aiSettingsGroup" style="display: none;">
+          <label for="openaiKey">
+            <span class="label-text">OpenAI API Key</span>
+            <span class="label-hint">Get your key from platform.openai.com</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              id="openaiKey"
+              placeholder="sk-proj-************************************************"
+              autocomplete="off"
+            >
+            <button class="toggle-visibility" id="toggleOpenaiVisibility" type="button">
+              <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group ai-settings" id="modelSelectGroup" style="display: none;">
+          <label for="openaiModel">
+            <span class="label-text">OpenAI Model</span>
+            <span class="label-hint">Choose the model for formatting</span>
+          </label>
+          <select id="openaiModel" class="select-input">
+            <option value="gpt-4o-mini" selected>GPT-4o-mini (Recommended - $0.15/$0.60 per 1M tokens)</option>
+            <option value="gpt-4o">GPT-4o (Higher quality - $2.50/$10.00 per 1M tokens)</option>
+            <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Cheaper - $0.50/$1.50 per 1M tokens)</option>
+          </select>
+          <p class="form-hint cost-estimate" id="costEstimate">
+            Estimated cost: <strong>~$0.0006 per contact</strong> with GPT-4o-mini
+          </p>
+        </div>
+      </div>
+
+      <!-- General Settings -->
+      <div class="settings-group">
+        <h3 class="settings-group-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 1v6m0 6v6M23 12h-6m-6 0H1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          General Options
+        </h3>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="autoSync" checked>
+            <span class="checkbox-label">Auto-sync when marked as "Meeting Booked"</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="notificationsEnabled" checked>
+            <span class="checkbox-label">Show sync notifications</span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn-primary" id="saveSettings">
+        <span class="btn-text">Save Settings</span>
+      </button>
+    </div>
+
+    <div class="stats-section">
+      <h2>Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="syncCount">0</div>
+          <div class="stat-label">Total Syncs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="lastSync">Never</div>
+          <div class="stat-label">Last Sync</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="activity-section">
+      <div class="activity-header">
+        <h2>Activity Log</h2>
+        <button class="btn-clear-log" id="clearLog" title="Clear log">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="activity-log" id="activityLog">
+        <div class="activity-empty">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <p>No activity yet</p>
+          <span>Sync logs will appear here when leads are synced</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <a href="#" id="testConnection" class="link-button">Test Connection</a>
+      <span class="separator">•</span>
+      <a href="#" id="clearData" class="link-button">Clear Data</a>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">
+    <span class="toast-message" id="toastMessage"></span>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
