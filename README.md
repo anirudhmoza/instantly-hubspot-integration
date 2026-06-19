@@ -311,7 +311,6 @@ Comprehensive documentation is available:
 | **QUICK_START.md** | Fast installation and configuration guide |
 | **OPENAI_QUICK_START.md** | 5-minute setup for optional AI email formatting |
 | **OPENAI_INTEGRATION.md** | Technical details of the OpenAI integration |
-| **TEST_CHECKLIST.md** | Complete testing guide with 12+ test scenarios |
 | **DEBUGGING.md** | Detailed troubleshooting and debugging guide |
 | **CHANGES.md** | History of fixes and improvements |
 | **FORMATTING_IMPROVEMENTS.md** | Technical details of email formatting |
